@@ -24,10 +24,10 @@ def loop(pin, max_temp):
 	GPIO.output(pin,enable)
 	if enable:
 		logging.info('Registered temperature: {} fan will start'.format(CPU_temp))
-		threading.Timer(120, loop, [max_temp]).start()
+		threading.Timer(120, loop, [pin, max_temp]).start()
 	else:		
 		logging.debug('Temperature registered: {}'.format(CPU_temp))
-		threading.Timer(2, loop, [max_temp]).start()
+		threading.Timer(2, loop, [pin, max_temp]).start()
 
 def main():
 
@@ -38,7 +38,7 @@ def main():
 
 	# Command line arguments/options
 	try:
-		opts, args = getopt.getopt(sys.argv[1:],"hl:t:")
+		opts, args = getopt.getopt(sys.argv[1:],"hl:t:p:")
 	except getopt.GetoptError:
 		logging.error('Failed to start. Example run command: python fan.py -l DEBUG -t 50.0')
 		sys.exit(2)
