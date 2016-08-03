@@ -35,3 +35,8 @@ Available arguments:
 ### Debugging
 
 Logs are located in `/home/osmc/logs/fan.log`
+
+### Other
+
+Actions, such as displaying notification cam be performed thanks to built in script `xbmc-send`
+More details about available functions are listed in this [wiki](http://kodi.wiki/view/List_of_built-in_functions)
