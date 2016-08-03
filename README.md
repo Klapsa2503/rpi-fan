@@ -22,7 +22,7 @@ To install this script first you need to setup electrical circuit so that fan ca
 * Download file `fan.py` and place it wherever you like.
 * Execute command `sudo crontab -e`
 * Add new cron entry, example: `@reboot /usr/bin/python /home/osmc/scripts/fan.py -l INFO -t 45.0`. 
-Script will start every time RaspberryPi is starts.
+Script will start with RaspberryPi
 
 Available arguments:
 
