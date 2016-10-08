@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO  ## Import GPIO library
 import sys
 import os
 import threading
+import time
 import logging
 import getopt
 from subprocess import call
@@ -35,23 +36,33 @@ def loop(pin, max_temp, notification_enabled):
         logging.debug('Temperature registered: {}'.format(CPU_temp))
         threading.Timer(2, loop, [pin, max_temp, notification_enabled]).start()
 
+def initial_buz(pin):
+        if pin != 0:
+            GPIO.output(pin, True)
+            time.sleep(0.07)
+            GPIO.output(pin, False)
+            time.sleep(0.03)
+            GPIO.output(pin, True)
+            time.sleep(0.14)
+            GPIO.output(pin, False)
 
 def main():
     # Default values
     log_level = 'INFO'
     max_temp = 40.0
     pin = 7
+    buzzer_pin = 0
     notification_enabled = True
 
     # Command line arguments/options
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "dhl:t:p:")
+        opts, args = getopt.getopt(sys.argv[1:], "dhl:t:p:b:")
     except getopt.GetoptError:
         logging.error('Failed to start. Example run command: python fan.py -l DEBUG -t 50.0')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'python fan.py -l DEBUG -t 50.0'
+            print 'Example of usage: python fan.py -l DEBUG -t 50.0'git
             sys.exit()
         elif opt in ("-l"):
             log_level = arg
@@ -60,6 +71,8 @@ def main():
             max_temp = arg
         elif opt in ("-p"):
             pin = int(arg)
+        elif opt in ("-b"):
+            buzzer_pin = int(arg)
         elif opt in ("-d"):
             notification_enabled = False
 
@@ -67,10 +80,16 @@ def main():
 
     # Configure pins
     GPIO.setmode(GPIO.BOARD)  ## Use board pin numbering
-    GPIO.setup(pin, GPIO.OUT)  ## Setup GPIO Pin 7 to OUT
+    GPIO.setup(pin, GPIO.OUT)  ## Setup GPIO Pin to OUT
+    if buzzer_pin != 0:
+        GPIO.setup(buzzer_pin, GPIO.OUT)  ## Setup GPIO Pin to OUT
 
-    logging.info('Configuration finished. Log_level: {}, max_temp: {}, starting main loop'.format(log_level, max_temp))
+    # Logging
+    logging.info('Configuration finished. Log_level: {}, max_temp: {}, fan_pin: {}, buzzer_pin: {} starting main loop'
+                 .format(log_level, max_temp, pin, buzzer_pin))
 
+    # Calling actual methods
+    initial_buz(buzzer_pin)
     loop(pin, float(max_temp), notification_enabled)
 
 

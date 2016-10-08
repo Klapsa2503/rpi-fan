@@ -30,6 +30,7 @@ Available arguments:
 * **-l** - log level (TRACE, DEBUG, ...) [default: `INFO`]
 * **-t** - temperature above which fan will start [default: `40.0`]
 * **-p** - pin to which fan (`PWM`) will be connected [default: `7`]
+* **-b** - pin to which fan buzzer will be connected [default: buzzer is disabled]
 * **-d** - if passed, notifications will not be shown
 
 ### Debugging
